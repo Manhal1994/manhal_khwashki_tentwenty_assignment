@@ -43,7 +43,8 @@ class MovieRepositoryImpl implements MovieRepository {
     if (await internetConnectionChecker.hasConnection) {
       final res = await movieRemoteDataSource.getGeners();
       if (res != null) {
-        movieLocalDataSource.cachGeners(response: json.encode(res.toJson()));
+        await movieLocalDataSource.cachGeners(
+            response: json.encode(res.toJson()));
         return res;
       }
     } else {
@@ -57,10 +58,12 @@ class MovieRepositoryImpl implements MovieRepository {
     if (await internetConnectionChecker.hasConnection) {
       final res = await movieRemoteDataSource.search(query: query, page: page);
       if (res != null) {
-        movieLocalDataSource.cachsearchResults(
+        await movieLocalDataSource.cachsearchResults(
             response: json.encode(res.toJson()), query: query);
         return res;
       }
+    } else {
+      return await movieLocalDataSource.getSeachResults(query: query);
     }
   }
 }

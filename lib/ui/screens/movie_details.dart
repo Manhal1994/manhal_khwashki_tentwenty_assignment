@@ -9,6 +9,7 @@ import 'package:mymovie/data/models/movie_list_model.dart';
 import 'package:mymovie/resources/resources.dart';
 import 'package:intl/intl.dart';
 import 'package:mymovie/ui/screens/video_trailer.dart';
+import 'package:mymovie/ui/ui_helpers.dart';
 import 'package:mymovie/utils/size_config.dart';
 
 import '../../injection_container.dart';
@@ -270,9 +271,13 @@ class _MovieDetailsState extends State<MovieDetails> {
                               physics: const ScrollPhysics(),
                               itemCount: movie.genreIds!.length,
                               itemBuilder: (contrxt, index) {
-                                return mapGenersIdsToWidgets(
-                                    blocState.response!.genres!,
-                                    movie.genreIds![index]);
+                                return (blocState.response != null &&
+                                        blocState.response!.genres != null &&
+                                        movie.genreIds != null)
+                                    ? mapGenersIdsToWidgets(
+                                        blocState.response!.genres!,
+                                        movie.genreIds![index])
+                                    : Container();
                               }),
                         );
                       } else {
@@ -312,67 +317,5 @@ class _MovieDetailsState extends State<MovieDetails> {
         ]);
       })),
     );
-  }
-
-  Widget responsiveWidget(List<Widget> children) {
-    return SizeConfig.isPortrait
-        ? Column(
-            children: children,
-          )
-        : Row(
-            children: children,
-          );
-  }
-
-  Widget toggleOrientationWidget(
-      {required Widget portait, required Widget landscape}) {
-    return SizeConfig.isPortrait ? portait : landscape;
-  }
-
-  Widget mapGenersIdsToWidgets(
-    List<Genres> geners,
-    int id,
-  ) {
-    return Container(
-      height: 24,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-      ),
-      margin: const EdgeInsets.only(right: 5),
-      decoration: BoxDecoration(
-          color: mapGenersIdToColor(id),
-          borderRadius: BorderRadius.circular(16)),
-      child: Center(
-        child: Text(
-          geners.firstWhere((element) => element.id == id).name ?? "",
-          style: const TextStyle(color: Colors.white, fontSize: 12),
-        ),
-      ),
-    );
-  }
-
-  Color mapGenersIdToColor(int id) {
-    var color = Colors.white;
-    switch (id) {
-      case 28:
-        color = AppColor.lightGreen;
-        break;
-      case 878:
-        color = AppColor.darkYellow;
-        break;
-      case 53:
-        color = AppColor.lightPink;
-        break;
-      default:
-        color = Colors.black;
-    }
-    return color;
-  }
-
-  String toDate(String releseDate) {
-    final DateFormat formatter = DateFormat("yyyy-MM-dd");
-    var formatted = formatter.parse(releseDate);
-    final DateFormat toFormate = DateFormat("MMMM dd, yyyy");
-    return toFormate.format(formatted); // something like 2013-04-20
   }
 }

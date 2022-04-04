@@ -27,15 +27,12 @@ class MovieLocalDataSource {
   }
 
   Future<GenralModel?> getGeners() async {
-    if (genralModel != null) {
-      String? res = await movieDB.getGeners();
-      if (res != null) {
-        return GenralModel.fromJson(json.decode(res));
-      } else {
-        return null;
-      }
+    String? res = await movieDB.getGeners();
+    if (res != null) {
+      return GenralModel.fromJson(json.decode(res));
+    } else {
+      return null;
     }
-    return genralModel;
   }
 
   Future<dynamic> cachGeners({required String response}) async {

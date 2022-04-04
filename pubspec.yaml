@@ -58,13 +58,12 @@ dependencies:
   intl: ^0.17.0
   # plugin for displaying inline video
   video_player: ^2.1.2
+  # play youtube vides
   youtube_player_flutter: ^8.0.0
-  #
   flutter_inappwebview: ^5.3.2
   # Service Locator
   get_it: ^7.2.0
-  # code generator for get_it
-  injectable: ^1.5.3
+  # chache networked images
   cached_network_image: ^3.2.0
   sqlite3: ^1.1.0
  

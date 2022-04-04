@@ -11,6 +11,8 @@ import 'package:mymovie/data/datasources/local/movie_local_data_source.dart';
 import 'package:mymovie/data/datasources/remote/movie_remote_data_source.dart';
 import 'package:mymovie/data/models/video_model.dart';
 import 'package:mymovie/data/movie_repository_impl.dart';
+import 'package:mymovie/resources/constants.dart';
+import 'package:mymovie/utils/size_config.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -67,33 +69,43 @@ class _VideoTrailerState extends State<VideoTrailer> {
                   player: YoutubePlayer(
                     aspectRatio: 16 / 9,
                     controller: controller,
-                    topActions: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Container(
-                                width: 75,
-                                child: Center(
-                                  child: Text("Done"),
-                                ),
-                              ),
-                            ),
-                          ))
-                    ],
                     onEnded: (metaData) {
                       Navigator.of(context).pop();
                     },
                   ),
                   builder: (context, player) {
-                    return Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      child: player,
+                    return Align(
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            child: player,
+                          ),
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Material(
+                                color: Colors.red,
+                                child: InkWell(
+                                  onTap: () {
+                                    controller.dispose();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const SizedBox(
+                                    width: 75,
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(
+                                        Kdone,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ))
+                        ],
+                      ),
                     );
                   },
                 );
@@ -102,7 +114,7 @@ class _VideoTrailerState extends State<VideoTrailer> {
                   child: CircularProgressIndicator(),
                 );
               } else {
-                return const Center(child: Text("Error"));
+                return const Center(child: Text(Kerror));
               }
             },
           ),
